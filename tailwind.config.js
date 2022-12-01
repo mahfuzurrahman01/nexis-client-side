@@ -3,21 +3,23 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
-  themes: [
-    {
-      NexisTheme: {
+  daisyui: {
+    themes: [
+      {
+        NexisTheme: {
 
-        "primary": "#1678CB",
+          "primary": "#1678CB",
 
-        "secondary": "#3B8BEA",
+          "secondary": "#3B8BEA",
 
-        "accent": "#242424",
+          "accent": "#242424",
 
-        "neutral": "#68D6F5",
+          "neutral": "#68D6F5",
 
-        "base-100": "#FFFFFF",
+          "base-100": "#FFFFFF",
+        },
       },
-    },
-  ],
+    ],
+  },
   plugins: [require("daisyui")],
 }
