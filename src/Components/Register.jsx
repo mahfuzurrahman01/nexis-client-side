@@ -2,8 +2,13 @@ import React, { useState } from 'react';
 import logo from '../assets/logo/ultimate hrm logo-05-02 5.png'
 import image from '../assets/image/istockphoto-1321277096-612x612 1.png'
 import { BsArrowRight } from 'react-icons/bs'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useContext } from 'react';
+import { AuthContext } from '../AuthProvider/AuthProvider';
 const Register = () => {
+    const navigate = useNavigate()
+    const { createUserWithEmailPass } = useContext(AuthContext)
     const [info, setInfo] = useState({})
     const [error, setError] = useState('')
     const [formState, setFormState] = useState(1)
@@ -27,9 +32,31 @@ const Register = () => {
     const signUpHandle = () => {
         if (info.password.length < 8) {
             setError('Your password must be 8 characters')
-            return
         }
-        
+        console.log(info)
+        const email = info.email;
+        const password = info.password;
+        createUserWithEmailPass(email, password)
+            .then(result => {
+                const user = result.user;
+                console.log(user)
+
+                fetch('http://localhost:5000/signUp', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(info)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.acknowledged) {
+                            toast.success('User created successfully')
+                            navigate('/test')
+                        }
+                    })
+            })
+            .catch(err => toast.error(err.message))
     }
     return (
         <div className='flex justify-center items-center my-16'>

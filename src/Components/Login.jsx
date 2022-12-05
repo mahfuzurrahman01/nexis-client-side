@@ -2,10 +2,55 @@ import React from 'react';
 import logo from '../assets/logo/ultimate hrm logo-05-02 5.png'
 import image from '../assets/image/istockphoto-1321277096-612x612 1.png'
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../AuthProvider/AuthProvider';
+import toast from 'react-hot-toast';
 const Login = () => {
+    const navigate = useNavigate()
+    const { signInWithEmailPass } = useContext(AuthContext)
+
     const { register, handleSubmit, formState: { errors } } = useForm()
-    const onSubmit = data => console.log(data)
+    const onSubmit = data => {
+        const email = data.email;
+        const password = data.password;
+        console.log(email, password)
+
+        signInWithEmailPass(data.email, data.password)
+            .then(result => {
+                const user = result.user;
+                console.log(user)
+                if (user?.email) {
+                    fetch(`http://localhost:5000/jwt?email=${user?.email}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log(data)
+                            if (data.token) {
+                                localStorage.setItem('token', data.token)
+                            }
+                        })
+                }
+                if (user?.email) {
+                    fetch('http://localhost:5000/signIn', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.acknowledged) {
+                                toast.success('Login successful')
+                                navigate('/test')
+                            }
+                        })
+                }
+            })
+            .catch(err => toast.error(err.message))
+    }
+
+
     return (
         <div className='flex justify-center items-center my-16'>
             <div className='w-3/5'>
