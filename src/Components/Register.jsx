@@ -40,8 +40,17 @@ const Register = () => {
             .then(result => {
                 const user = result.user;
                 console.log(user)
-
-                fetch('http://localhost:5000/signUp', {
+                if (user?.email) {
+                    fetch(`https://nexis-new-server.vercel.app/jwt?email=${user?.email}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log(data)
+                            if (data.token) {
+                                localStorage.setItem('token', data.token)
+                            }
+                        })
+                }
+                fetch('https://nexis-new-server.vercel.app/signUp', {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json'
@@ -52,7 +61,7 @@ const Register = () => {
                     .then(data => {
                         if (data.acknowledged) {
                             toast.success('User created successfully')
-                            navigate('/test')
+                            navigate('/home')
                         }
                     })
             })
@@ -60,11 +69,11 @@ const Register = () => {
     }
     return (
         <div className='flex justify-center items-center my-16'>
-            <div className='w-3/5'>
+            <div className='md:w-3/5 w-full'>
                 <img src={logo} alt="logo" className='w-44' />
                 <img src={image} alt="Banner" />
             </div>
-            <div className='w-[40%]'>
+            <div className='md:w-[40%] w-full'>
                 <div className="flex flex-col w-full px-16 py-28 shadow-2xl shadow-gray-400 rounded">
                     <h1 className="text-3xl font-bold text-accent mb-20 text-center">Sign Up Form</h1>
                     {

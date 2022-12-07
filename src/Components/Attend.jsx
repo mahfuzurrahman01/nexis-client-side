@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 
 const Attend = () => {
-    const [user, setUser] = useState()
+    const [user, setUser,loading] = useState()
     useEffect(() => {
-        fetch('http://localhost:5000/allUsers', {
+        fetch('https://nexis-new-server.vercel.app/allUsers', {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -14,7 +14,10 @@ const Attend = () => {
                 console.log(data)
                 setUser(data)
             })
-    }, [])
+    }, [setUser])
+    if(loading){
+        return <h1 className='text-center text-xl font-semibold'>loading...</h1>
+    }
     return (
         <div className="container p-2 mx-auto sm:p-4 text-gray-100">
             <div className='text-gray-500 text-center my-5'>

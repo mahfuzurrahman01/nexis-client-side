@@ -7,8 +7,12 @@ import { AuthContext } from '../AuthProvider/AuthProvider';
 const Navbar = () => {
     const { user, logOut } = useContext(AuthContext)
     const navbar = <div className='flex lg:flex-row flex-col gap-x-5 gap-y-4'>
-        {/* <Link to='/home'className=' bg-gray-100 bg-gradient-to-r bg-neutral from-secondary hover:bg-primary hover:bg-gradient-to-l hover:from-secondary text-white duration-500 py-1 px-2 rounded shadow-xl shadow-gray-200'><li>Home</li></Link> */}
-        <Link to='/test' className=' bg-gradient-to-r bg-neutral from-secondary hover:bg-primary hover:bg-gradient-to-l hover:from-secondary text-white duration-500 py-1 px-2 rounded shadow-xl shadow-gray-300'><li>Attendance</li></Link>
+        {
+            !user && <Link to='/home' className='  bg-gradient-to-r bg-neutral from-secondary hover:bg-primary hover:bg-gradient-to-l hover:from-secondary text-white duration-500 py-1 px-2 rounded shadow-xl shadow-gray-200'><li>Home</li></Link>
+        }
+        {
+            user && <Link to='/test' className=' bg-gradient-to-r bg-neutral from-secondary hover:bg-primary hover:bg-gradient-to-l hover:from-secondary text-white duration-500 py-1 px-2 rounded shadow-xl shadow-gray-300'><li>Attendance</li></Link>
+        }
     </div>
     const logOutHandle = () => {
         logOut()

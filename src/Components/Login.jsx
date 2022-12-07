@@ -2,13 +2,16 @@ import React from 'react';
 import logo from '../assets/logo/ultimate hrm logo-05-02 5.png'
 import image from '../assets/image/istockphoto-1321277096-612x612 1.png'
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import toast from 'react-hot-toast';
 const Login = () => {
     const navigate = useNavigate()
     const { signInWithEmailPass } = useContext(AuthContext)
+
+    let location = useLocation();
+    let from = location.state?.from?.pathname || "/";
 
     const { register, handleSubmit, formState: { errors } } = useForm()
     const onSubmit = data => {
@@ -21,7 +24,7 @@ const Login = () => {
                 const user = result.user;
                 console.log(user)
                 if (user?.email) {
-                    fetch(`http://localhost:5000/jwt?email=${user?.email}`)
+                    fetch(`https://nexis-new-server.vercel.app/jwt?email=${user?.email}`)
                         .then(res => res.json())
                         .then(data => {
                             console.log(data)
@@ -31,7 +34,7 @@ const Login = () => {
                         })
                 }
                 if (user?.email) {
-                    fetch('http://localhost:5000/signIn', {
+                    fetch('https://nexis-new-server.vercel.app/signIn', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json'
@@ -42,7 +45,7 @@ const Login = () => {
                         .then(data => {
                             if (data.acknowledged) {
                                 toast.success('Login successful')
-                                navigate('/test')
+                                navigate(from, { replace: true });
                             }
                         })
                 }
@@ -52,12 +55,12 @@ const Login = () => {
 
 
     return (
-        <div className='flex justify-center items-center my-16'>
-            <div className='w-3/5'>
+        <div className='flex md:flex-row flex-col justify-center items-center my-16'>
+            <div className='md:w-3/5 w-full'>
                 <img src={logo} alt="logo" className='w-44' />
                 <img src={image} alt="Banner" />
             </div>
-            <div className='w-[40%]'>
+            <div className='md:w-[40%] w-full'>
                 <div className="flex flex-col w-full px-16 py-28 shadow-2xl shadow-gray-400 rounded">
                     <h1 className="text-3xl font-bold text-accent mb-20 text-center">Log In Form</h1>
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">

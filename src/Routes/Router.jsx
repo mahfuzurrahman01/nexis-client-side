@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Attend from "../Components/Attend";
 import Home from "../Components/Home";
 import Login from "../Components/Login";
+import Private from "../Components/Private/Private";
 import Register from "../Components/Register";
 import Main from "../Layouts/Main";
 
@@ -20,7 +21,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/test',
-                element: <Attend></Attend>
+                element: <Private><Attend></Attend></Private>
             }
         ]
     },
